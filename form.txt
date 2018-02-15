@@ -1,0 +1,23 @@
+input -> lexer -> token, display for now
+lexer references tables
+
+objects to make: location, file
+
+lexer
+	state machine, detecting patterns of characters
+	big ol switch statement, detecting symbols like comment and newline
+	buffer
+	keyword table?
+
+token
+	name
+	attribute
+	(location [file pointer, 8 bits for column, 24 for row])
+
+symbol table, string table? keyword table?
+
+main
+	ifstream
+	read the file
+	symbol table
+	lexer
