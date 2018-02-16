@@ -46,6 +46,7 @@ enum token_name {
   tok_floating_point,
   tok_character,
   tok_string,
+  tok_type_specifier,
   tok_eof,
 
 };
