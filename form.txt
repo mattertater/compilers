@@ -19,5 +19,5 @@ symbol table, string table? keyword table?
 main
 	ifstream
 	read the file
-	symbol table
+	//symbol table
 	lexer
