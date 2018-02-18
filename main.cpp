@@ -2,26 +2,22 @@
 //
 // Reads input file and looks for valid tokens.
 // Prints them out along with some helpful information
+//
+// Pretty close to working!!!
 
 #include <iostream>
-#include <fstream>
-#include <fstream>
 
 #include "lexer.hpp"
-
-using namespace std;
+#include "file.hpp"
 
 int main() {
-  ifstream source_file("test.mc");
-  string source;
+  file source_file("test.mc");
 
-  while (!source_file.eof())
-    source += source_file.get();
+  symbol_table syms;
+  lexer lex(syms, source_file);
 
-  lexer lex(source);
-
-  while (!lex.eof()){
-
+  while (token tok = lex()){
+    std::cout << tok << '\n';
   }
 
 }

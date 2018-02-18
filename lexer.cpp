@@ -3,11 +3,12 @@
 //
 
 #include "lexer.hpp"
+#include "file.hpp"
 
-#include <cassert>
-#include <cctype>
 #include <sstream>
 #include <iostream>
+#include <cassert>
+#include <cctype>
 
 // -------------------------------------
 // Character classes
@@ -53,9 +54,10 @@ static const char* get_end_of_input(std::string& f) {
   return f.get_text().data() + f.get_text().size();
 }
 
-lexer::lexer(std::string& f) : m_first(get_start_of_input(f)),
-                               m_last(get_end_of_input(f)),
-                               m_current_loc(f, 0, 0) {
+lexer::lexer(symbol_table& syms, const file& f) : symbols(syms),
+                                                  m_first(get_start_of_input(f)),
+                                                  m_last(get_end_of_input(f)),
+                                                  m_current_loc(f, 0, 0) {
   m_reserved.insert({
 
     // Keywords, same order as in token.hpp
@@ -122,14 +124,17 @@ void lexer::accept(int n) {
 
 token lexer::scan() {
   while (!eof()) {
-    // Note the start location of the token.
+
     m_token_loc = m_current_loc;
-    switch (*m_first) { // Don't use peek(), eof() is never true.
+
+    switch (*m_first) {
+      // Ignore whitespace
       case ' ':
       case '\t':  skip_space();   continue;
       case '\n':  skip_newline(); continue;
       case '#':   skip_comment(); continue;
 
+      // Punctuators
       case '(':   return lex_punctuator(tok_left_paren);
       case ')':   return lex_punctuator(tok_right_paren);
       case '[':   return lex_punctuator(tok_left_bracket);
@@ -140,6 +145,7 @@ token lexer::scan() {
       case ';':   return lex_punctuator(tok_semicolon);
       case ':':   return lex_punctuator(tok_colon);
 
+      // Operators
       case '<':   if (peek(1) == '=') return lex_relational_operator(2, op_le);
                   if (peek(1) == '<') return lex_bitwise_operator(2, op_shl);
                   return lex_relational_operator(1, op_lt);
@@ -167,7 +173,7 @@ token lexer::scan() {
       default: {
         if (is_nondigit(*m_first))
           return lex_word();
-        if (is_digit(*m_first))
+        else if (is_digit(*m_first))
           return lex_number();
 
         std::stringstream ss;
@@ -180,7 +186,7 @@ token lexer::scan() {
 }
 
 
-
+// Whitespace skipping helper functions
 void lexer::skip_space() {
   assert(is_space(*m_first));
   ignore();
@@ -188,16 +194,12 @@ void lexer::skip_space() {
     ignore();
 }
 
-
-
 void lexer::skip_newline() {
   assert(*m_first == '\n');
   m_current_loc.line += 1;
   m_current_loc.column = 0;
   ++m_first;
 }
-
-
 
 void lexer::skip_comment() {
   assert(*m_first == '#');

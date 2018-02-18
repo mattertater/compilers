@@ -5,10 +5,14 @@
 
 #include "token.hpp"
 
+#include <unordered_map>
+
+class file;
+
 class lexer {
 
 public:
-  lexer(std::string& f);
+  lexer(symbol_table& syms, const file& f);
 
   token operator()() { return scan(); }
 
@@ -52,10 +56,9 @@ private:
   // gives back the unescaped character rather than a token
   char scan_escape_sequence();
 
-private:
   // Keeps track of the current position
   const char* m_first;
   const char* m_last;
 
-
+  std::unordered_map<symbol, token> m_res_words;
 };
