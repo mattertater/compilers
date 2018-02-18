@@ -2,7 +2,9 @@
 // Manage names, types, and properties of tokens
 //
 
-enum token_name {
+#include "symbol.hpp"
+
+enum token {
   // Punctuators
   tok_lBrace,
   tok_rBrace,

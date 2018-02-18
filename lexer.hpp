@@ -8,7 +8,7 @@
 class lexer {
 
 public:
-  lexer(symbol_table& syms, const file& f);
+  lexer(std::string& f);
 
   token operator()() { return scan(); }
 
@@ -36,7 +36,7 @@ private:
   void skip_comment();
 
   // Fucntions that return a token based on what is accepted
-  token lex_punctuator(token_name n);
+  token lex_punctuator(token n);
   token lex_relational_operator(int len, relational_op op);
   token lex_arithmetic_operator(arithmetic_op op);
   token lex_bitwise_operator(int len, bitwise_op op);

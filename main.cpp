@@ -5,8 +5,9 @@
 
 #include <iostream>
 #include <fstream>
-#include <string>
 #include <fstream>
+
+#include "lexer.hpp"
 
 using namespace std;
 
@@ -19,6 +20,8 @@ int main() {
 
   lexer lex(source);
 
-  while (!lex.eof());
+  while (!lex.eof()){
+
+  }
 
 }

@@ -44,19 +44,18 @@ static bool is_newline(char c) {
 // -------------------------------------
 // Lexer classes
 // -------------------------------------
-static const char* get_start_of_input(const file& f) {
+static const char* get_start_of_input(std::string& f) {
   return f.get_text().data();
 }
 
 
-static const char* get_end_of_input(const file& f) {
+static const char* get_end_of_input(std::string& f) {
   return f.get_text().data() + f.get_text().size();
 }
 
-lexer::lexer(symbol_table& syms, const file& f) : m_syms(syms),
-                                                  m_first(get_start_of_input(f)),
-                                                  m_last(get_end_of_input(f)),
-                                                  m_current_loc(f, 0, 0) {
+lexer::lexer(std::string& f) : m_first(get_start_of_input(f)),
+                               m_last(get_end_of_input(f)),
+                               m_current_loc(f, 0, 0) {
   m_reserved.insert({
 
     // Keywords, same order as in token.hpp
@@ -296,12 +295,10 @@ token lexer::lex_number() {
     return {decimal, std::atoi(str.c_str()), m_token_loc};
   }
 
-  // FIXME: There must be at least one digit.
   accept();
   while (!eof() && is_digit(*m_first))
     accept();
 
-  // FIXME: Lex the exponent.
 
   std::string str(start, m_first);
   return {std::atof(str.c_str()), m_token_loc};
@@ -312,8 +309,6 @@ token lexer::lex_number() {
 
 token lexer::lex_binary_number() {
   accept(2);
-
-  // FIXME: There must be at least one digit.
 
   const char* start = m_first;
   while (!eof() && is_binary_digit(*m_first))
@@ -329,8 +324,6 @@ token lexer::lex_binary_number() {
 token lexer::lex_hexadecimal_number() {
   accept(2);
 
-  // FIXME: There must be at least one digit.
-
   const char* start = m_first;
   while (!eof() && is_hexadecimal_digit(*m_first))
     accept();
@@ -340,13 +333,9 @@ token lexer::lex_hexadecimal_number() {
 }
 
 
-
-
 static bool is_character_character(char c){
   return c != '\n' && c != '\'';
 }
-
-
 
 
 char lexer::scan_escape_sequence() {
