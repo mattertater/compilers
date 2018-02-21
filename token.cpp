@@ -133,8 +133,6 @@ static bool has_attribute(token_name n) {
   }
 }
 
-
-
 token::token(token_name n, location loc) : m_name(n), m_loc(loc) {
   assert(!has_attribute(n));
 }
@@ -197,7 +195,6 @@ token::token(string_attr s, location loc) : m_name(tok_string), m_attr(s), m_loc
 token::token(type_spec ts, location loc) : m_name(tok_type_specifier), m_attr(ts), m_loc(loc) { }
 
 
-// TODO: This should be an io-manipulator. Also, stop allocating strings.
 static std::string escape(char c) {
   switch (c) {
     case '\'': return "\\\'";
@@ -214,7 +211,6 @@ static std::string escape(char c) {
   }
 }
 
-// TODO: See the comments above.
 static std::string escape(const std::string& s) {
   std::string ret;
   for (char c : s)
@@ -224,10 +220,6 @@ static std::string escape(const std::string& s) {
 
 std::ostream& operator<<(std::ostream& os, token tok) {
   os << '<';
-
-  // if (tok.get_location()) {
-    os << tok.get_location() << ':';
-  // }
 
   os << to_string(tok.get_name());
   switch (tok.get_name()) {
@@ -257,7 +249,6 @@ std::ostream& operator<<(std::ostream& os, token tok) {
   case tok_binary_integer:
   case tok_decimal_integer:
   case tok_hexadecimal_integer:
-    // FIXME: Reset the base.
     os << ':' << std::setbase(tok.get_radix()) << tok.get_integer();
     break;
 
