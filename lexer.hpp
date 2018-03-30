@@ -41,11 +41,11 @@ private:
 
   // Fucntions that return a token based on what is accepted
   token lex_punctuator(token n);
-  token lex_relational_operator(int len, relational_op op);
-  token lex_arithmetic_operator(arithmetic_op op);
-  token lex_bitwise_operator(int len, bitwise_op op);
-  token lex_conditional_operator();
-  token lex_assignment_operator();
+  token lex_relational_op(int len, relational_op op);
+  token lex_arithmetic_op(arithmetic_op op);
+  token lex_bitwise_op(int len, bitwise_op op);
+  token lex_conditional_op();
+  token lex_assignment_op();
   token lex_word();
   token lex_number();
   token lex_binary_number();

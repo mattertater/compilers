@@ -113,10 +113,10 @@ static bool has_attribute(token_name n) {
 
   switch (n) {
 
-    case tok_relational_operator:
-    case tok_arithmetic_operator:
-    case tok_bitwise_operator:
-    case tok_logical_operator:
+    case tok_relational_op:
+    case tok_arithmetic_op:
+    case tok_bitwise_op:
+    case tok_logical_op:
     case tok_identifier:
     case tok_binary_integer:
     case tok_decimal_integer:
@@ -139,19 +139,19 @@ token::token(token_name n, location loc) : m_name(n), m_loc(loc) {
 
 token::token(symbol sym, location loc) : m_name(tok_identifier), m_attr(sym), m_loc(loc) { }
 
-token::token(relational_op op, location loc) : m_name(tok_relational_operator), m_attr(op), m_loc(loc) { }
+token::token(relational_op op, location loc) : m_name(tok_relational_op), m_attr(op), m_loc(loc) { }
 
-token::token(arithmetic_op op, location loc) : m_name(tok_arithmetic_operator), m_attr(op), m_loc(loc) { }
+token::token(arithmetic_op op, location loc) : m_name(tok_arithmetic_op), m_attr(op), m_loc(loc) { }
 
-token::token(bitwise_op op, location loc) : m_name(tok_bitwise_operator), m_attr(op), m_loc(loc) { }
+token::token(bitwise_op op, location loc) : m_name(tok_bitwise_op), m_attr(op), m_loc(loc) { }
 
-token::token(logical_op op, location loc) : m_name(tok_logical_operator), m_attr(op), m_loc(loc) { }
+token::token(logical_op op, location loc) : m_name(tok_logical_op), m_attr(op), m_loc(loc) { }
 
 token::token(long long val, location loc) : token(tok_decimal_integer, decimal, val, loc) { }
 
 
 
-static token_name get_token_name(radix rad) {
+static token_name getTokenName(radix rad) {
   switch (rad) {
     case binary:       return tok_binary_integer;
     case decimal:      return tok_decimal_integer;
@@ -161,7 +161,7 @@ static token_name get_token_name(radix rad) {
 
 
 
-token::token(radix rad, long long val, location loc) : token(get_token_name(rad), rad, val, loc) { }
+token::token(radix rad, long long val, location loc) : token(getTokenName(rad), rad, val, loc) { }
 
 
 
@@ -221,55 +221,55 @@ static std::string escape(const std::string& s) {
 std::ostream& operator<<(std::ostream& os, token tok) {
   os << '<';
 
-  os << to_string(tok.get_name());
-  switch (tok.get_name()) {
+  os << to_string(tok.getName());
+  switch (tok.getName()) {
   default:
     break;
 
-  case tok_relational_operator:
-    os << ':' << to_string(tok.get_relational_operator());
+  case tok_relational_op:
+    os << ':' << to_string(tok.getRelationalOperator());
     break;
 
-  case tok_arithmetic_operator:
-    os << ':' << to_string(tok.get_arithmetic_operator());
+  case tok_arithmetic_op:
+    os << ':' << to_string(tok.getArithmeticOperator());
     break;
 
-  case tok_bitwise_operator:
-    os << ':' << to_string(tok.get_bitwise_operator());
+  case tok_bitwise_op:
+    os << ':' << to_string(tok.getBitwiseOperator());
     break;
 
-  case tok_logical_operator:
-    os << ':' << to_string(tok.get_logical_operator());
+  case tok_logical_op:
+    os << ':' << to_string(tok.getLogicalOperator());
     break;
 
   case tok_identifier:
-    os << ':' << *tok.get_identifier();
+    os << ':' << *tok.getIdentifier();
     break;
 
   case tok_binary_integer:
   case tok_decimal_integer:
   case tok_hexadecimal_integer:
-    os << ':' << std::setbase(tok.get_radix()) << tok.get_integer();
+    os << ':' << std::setbase(tok.getRadix()) << tok.getInteger();
     break;
 
   case tok_boolean:
-    os << ':' << tok.get_boolean();
+    os << ':' << tok.getBoolean();
     break;
 
   case tok_floating_point:
-    os << ':' << tok.get_floating_point();
+    os << ':' << tok.getFloatingPoint();
     break;
 
   case tok_character:
-    os << ':' << escape(tok.get_character());
+    os << ':' << escape(tok.getCharacter());
     break;
 
   case tok_string:
-    os << ':' << escape(tok.get_string());
+    os << ':' << escape(tok.getString());
     break;
 
   case tok_type_specifier:
-    os << ':' << to_string(tok.get_type_specifier());
+    os << ':' << to_string(tok.getTypeSpecifier());
     break;
   }
   os << '>';

@@ -45,18 +45,18 @@ static bool is_newline(char c) {
 // -------------------------------------
 // Lexer classes
 // -------------------------------------
-static const char* get_start_of_input(std::string& f) {
-  return f.get_text().data();
+static const char* getStartOfInput(std::string& f) {
+  return f.getText().data();
 }
 
 
-static const char* get_end_of_input(std::string& f) {
-  return f.get_text().data() + f.get_text().size();
+static const char* getEndOfInput(std::string& f) {
+  return f.getText().data() + f.getText().size();
 }
 
 lexer::lexer(symbol_table& syms, const file& f) : symbols(syms),
-                                                  m_first(get_start_of_input(f)),
-                                                  m_last(get_end_of_input(f)),
+                                                  m_first(getStartOfInput(f)),
+                                                  m_last(getEndOfInput(f)),
                                                   m_current_loc(f, 0, 0) {
   m_reserved.insert({
 
@@ -146,27 +146,27 @@ token lexer::scan() {
       case ':':   return lex_punctuator(tok_colon);
 
       // Operators
-      case '<':   if (peek(1) == '=') return lex_relational_operator(2, op_le);
-                  if (peek(1) == '<') return lex_bitwise_operator(2, op_shl);
-                  return lex_relational_operator(1, op_lt);
+      case '<':   if (peek(1) == '=') return lex_relational_op(2, op_le);
+                  if (peek(1) == '<') return lex_bitwise_op(2, op_shl);
+                  return lex_relational_op(1, op_lt);
 
-      case '>':   if (peek(1) == '=') return lex_relational_operator(2, op_ge);
-                  if (peek(1) == '>') return lex_bitwise_operator(2, op_shr);
-                  return lex_relational_operator(1, op_gt);
+      case '>':   if (peek(1) == '=') return lex_relational_op(2, op_ge);
+                  if (peek(1) == '>') return lex_bitwise_op(2, op_shr);
+                  return lex_relational_op(1, op_gt);
 
-      case '=':   if (peek(1) == '=') return lex_relational_operator(2, op_eq);
-                  else return lex_assignment_operator();
+      case '=':   if (peek(1) == '=') return lex_relational_op(2, op_eq);
+                  else return lex_assignment_op();
 
-      case '+':   return lex_arithmetic_operator(op_add);
-      case '-':   return lex_arithmetic_operator(op_sub);
-      case '*':   return lex_arithmetic_operator(op_mul);
-      case '/':   return lex_arithmetic_operator(op_quo);
-      case '%':   return lex_arithmetic_operator(op_rem);
-      case '&':   return lex_bitwise_operator(1, op_and);
-      case '|':   return lex_bitwise_operator(1, op_ior);
-      case '^':   return lex_bitwise_operator(1, op_xor);
-      case '~':   return lex_bitwise_operator(1, op_not);
-      case '?':   return lex_conditional_operator();
+      case '+':   return lex_arithmetic_op(op_add);
+      case '-':   return lex_arithmetic_op(op_sub);
+      case '*':   return lex_arithmetic_op(op_mul);
+      case '/':   return lex_arithmetic_op(op_quo);
+      case '%':   return lex_arithmetic_op(op_rem);
+      case '&':   return lex_bitwise_op(1, op_and);
+      case '|':   return lex_bitwise_op(1, op_ior);
+      case '^':   return lex_bitwise_op(1, op_xor);
+      case '~':   return lex_bitwise_op(1, op_not);
+      case '?':   return lex_conditional_op();
       case '\'':  return lex_character();
       case '"':   return lex_string();
 
@@ -217,37 +217,37 @@ token lexer::lex_punctuator(token_name n) {
 
 
 
-token lexer::lex_relational_operator(int len, relational_op op) {
+token lexer::lex_relational_op(int len, relational_op op) {
   accept(len);
   return { op, m_token_loc };
 }
 
 
 
-token lexer::lex_arithmetic_operator(arithmetic_op op) {
+token lexer::lex_arithmetic_op(arithmetic_op op) {
   accept();
   return { op, m_token_loc };
 }
 
 
 
-token lexer::lex_bitwise_operator(int len, bitwise_op op) {
+token lexer::lex_bitwise_op(int len, bitwise_op op) {
   accept(len);
   return { op, m_token_loc };
 }
 
 
 
-token lexer::lex_assignment_operator() {
+token lexer::lex_assignment_op() {
   accept();
-  return { tok_assignment_operator, m_token_loc };
+  return { tok_assignment_op, m_token_loc };
 }
 
 
 
-token lexer::lex_conditional_operator() {
+token lexer::lex_conditional_op() {
   accept();
-  return { tok_conditional_operator, m_token_loc };
+  return { tok_conditional_op, m_token_loc };
 }
 
 
@@ -266,7 +266,7 @@ token lexer::lex_word() {
   auto iter = m_reserved.find(sym);
   if (iter != m_reserved.end()) {
     const token& tok = iter->second;
-    return {tok.get_name(), tok.get_attribute(), m_token_loc};
+    return {tok.getName(), tok.get_attribute(), m_token_loc};
   }
   else
     return {sym, m_token_loc};

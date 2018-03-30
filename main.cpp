@@ -14,10 +14,12 @@ int main() {
   file source_file("test.mc");
 
   symbol_table syms;
-  lexer lex(syms, source_file);
 
-  while (token tok = lex()){
-    std::cout << tok << '\n';
-  }
+  // lexer lex(syms, source_file);
+  // while (token tok = lex())
+  //   std::cout << tok << '\n';
+
+  parser p(syms, input);
+  p.parse_declaration();
 
 }
