@@ -1,3 +1,6 @@
+-------------------------------
+OVERALL / LEXER
+
 input -> lexer -> token, display for now
 lexer references tables
 
@@ -21,3 +24,17 @@ main
 	read the file
 	//symbol table
 	lexer
+
+
+----------------------------------
+PARSER
+
+
+
+
+
+
+
+
+
+
