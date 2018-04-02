@@ -1,9 +1,10 @@
+//
 // Main file
 //
 // Reads input file and looks for valid tokens.
 // Prints them out along with some helpful information
 //
-// Pretty close to working!!!
+
 
 #include <iostream>
 
