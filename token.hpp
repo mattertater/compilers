@@ -227,7 +227,7 @@ inline radix token::getRadix() const {
   return m_attr.int_val.radix;
 }
 
-inlint double token::getFloatingPoint() const {
+inline double token::getFloatingPoint() const {
   assert(m_name == tok_floating_point);
   return m_attr.float_val;
 }
