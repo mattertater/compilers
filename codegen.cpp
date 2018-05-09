@@ -119,4 +119,33 @@ codegen_function {
   llvm::Value *generateCondExpr(const cond_expr *e);
   llvm::Value *generateAssignExpr(const cond_expr *e);
   llvm::Value *generateConvExpr(const conv_expr *e);
+
+  void generateStmt(const statement *s);
+  void generateBlockStmt(const block_statement *s);
+  void generateWhenStmt(const when_stmt *s);
+  void generateIfStmt(const if_stmt *s);
+  void generateWhileStmt(const while_stmt *s);
+  void generateBreakStmt(const break_stmt *s);
+  void generateContStmt(const cont_stmt *s);
+  void generateRetStmt(const ret_stmt *s);
+  void generateDeclStmt(const decl_stmt *s);
+  void generateExprStmt(const expr_stmt *s);
+
+  void generateDecl(const declaration *d);
+  void generateVarDecl(const var_decl *d);
+
+  void makeVariable(const var_decl *d);
+  void makeReference(const var_decl *d);
+
+  codegen_module *parent;
+  const func_decl *src;
+  llvm::Function *func;
+  llvm::BasicBlock *entry;
+  llvm::BasicBlock *curr;
+  variable_map local_vars;
+};
+
+std::string codegen_context::getName(const declaration *d) {
+  assert(d->getName());
+  return *d->getname();
 }
